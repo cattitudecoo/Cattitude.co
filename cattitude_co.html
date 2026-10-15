@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cattitude.co | 給主子最溫馨的寵愛 🐱</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans HK -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+HK:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Canvas Confetti for Checkout -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              brown: '#8A5C38',
+              brownDark: '#6E482A',
+              brownLight: '#A6754F',
+              green: '#5B8C73',
+              greenDark: '#466F5B',
+              greenLight: '#7BA890',
+              bg: '#FAF6EE',
+              cardBg: '#FFFFFF',
+              accent: '#E07A5F',
+              gold: '#F4A261'
+            }
+          },
+          fontFamily: {
+            sans: ['Noto Sans HK', 'Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'cute': '0 8px 20px -4px rgba(138, 92, 56, 0.12), 0 4px 8px -2px rgba(138, 92, 56, 0.08)',
+            'cute-lg': '0 12px 28px -6px rgba(138, 92, 56, 0.18), 0 6px 12px -2px rgba(138, 92, 56, 0.1)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF6EE;
+      font-family: 'Noto Sans HK', 'Inter', sans-serif;
+      color: #332B25;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF6EE;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8A5C38;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6E482A;
+    }
+
+    /* Cute paw pattern background element */
+    .paw-pattern {
+      background-image: radial-gradient(#8A5C38 0.75px, transparent 0.75px), radial-gradient(#8A5C38 0.75px, #FAF6EE 0.75px);
+      background-size: 30px 30px;
+      background-position: 0 0, 15px 15px;
+      opacity: 0.03;
+    }
+
+    /* Drawer Animation */
+    .drawer-overlay {
+      transition: opacity 0.3s ease-in-out;
+    }
+    .drawer-content {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Modal Animation */
+    .modal-backdrop {
+      transition: opacity 0.25s ease;
+    }
+    .modal-container {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+    }
+
+    /* Smooth Badge Pulse */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .pulse-badge {
+      animation: subtle-pulse 2s infinite;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen flex flex-col antialiased">
+
+  <!-- Background Pattern -->
+  <div class="fixed inset-0 paw-pattern pointer-events-none z-0"></div>
+
+  <!-- Announcement Bar / Dynamic Free Shipping Top Bar -->
+  <div id="top-announcement" class="bg-brand-brown text-white text-xs sm:text-sm py-2 px-4 text-center font-medium sticky top-0 z-40 transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="hidden md:flex items-center gap-2">
+        <span>🐾 歡迎來到 Cattitude.co 本地貓奴專屬用品店</span>
+      </div>
+      <div class="mx-auto md:mx-0 flex items-center gap-2">
+        <i class="fa-solid fa-truck-fast text-brand-gold animate-bounce"></i>
+        <span id="header-shipping-text">全店滿 <b>HK$350</b> 即享免費送貨服務！</span>
+      </div>
+      <div class="hidden md:flex items-center gap-4 text-xs opacity-90">
+        <span><i class="fa-solid fa-shield-cat mr-1"></i>100% 正貨保證</span>
+        <span><i class="fa-solid fa-clock mr-1"></i>香港現貨快速出貨</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <header class="bg-white/90 backdrop-blur-md sticky top-8 z-30 shadow-sm border-b border-brand-brown/10 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
+      
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-10 h-10 rounded-full bg-brand-brown flex items-center justify-center text-white text-xl shadow-md group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-cat"></i>
+        </div>
+        <div>
+          <span class="text-2xl font-black tracking-tight text-brand-brown">Cattitude<span class="text-brand-green">.co</span></span>
+          <span class="block text-[10px] font-bold tracking-widest uppercase text-brand-brown/60 -mt-1">Pet Supplies</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden lg:flex items-center gap-7 font-medium text-brand-brownDark">
+        <a href="#hero" class="hover:text-brand-green transition-colors py-1 border-b-2 border-transparent hover:border-brand-green">主頁</a>
+        <a href="#products" onclick="filterCategory('food')" class="hover:text-brand-green transition-colors py-1">🐱 貓貓食品</a>
+        <a href="#products" onclick="filterCategory('supplies')" class="hover:text-brand-green transition-colors py-1">🏠 貓貓用品</a>
+        <a href="#products" onclick="filterCategory('healthcare')" class="hover:text-brand-green transition-colors py-1">💊 寵物保健</a>
+        <a href="#products" onclick="filterCategory('toys')" class="hover:text-brand-green transition-colors py-1">🎾 寵物玩具</a>
+        <a href="#reviews" class="hover:text-brand-green transition-colors py-1">💬 顧客好評</a>
+      </nav>
+
+      <!-- Right Actions: Search, Wishlist, Cart -->
+      <div class="flex items-center gap-3">
+        <!-- Live Search Box -->
+        <div class="relative hidden sm:block w-48 lg:w-60">
+          <input type="text" id="search-input" oninput="handleSearch()" placeholder="搜尋罐罐、砂、玩具..." 
+            class="w-full pl-9 pr-4 py-2 text-sm bg-brand-bg/80 border border-brand-brown/20 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-green/50 text-brand-brownDark placeholder-brand-brown/50">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-brand-brown/50 text-sm"></i>
+        </div>
+
+        <!-- Wishlist Button -->
+        <button onclick="toggleWishlistDrawer()" class="relative p-2.5 rounded-full hover:bg-brand-bg text-brand-brown transition-colors">
+          <i class="fa-regular fa-heart text-xl"></i>
+          <span id="wishlist-badge" class="hidden absolute -top-1 -right-1 bg-brand-accent text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+        </button>
+
+        <!-- Cart Button -->
+        <button onclick="openCartDrawer()" class="relative bg-brand-green hover:bg-brand-greenDark text-white px-4 py-2.5 rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-95">
+          <i class="fa-solid fa-basket-shopping text-lg"></i>
+          <span class="font-bold text-sm hidden sm:inline">購物車</span>
+          <span id="cart-badge" class="bg-white text-brand-green text-xs font-black px-2 py-0.5 rounded-full">0</span>
+        </button>
+
+        <!-- Mobile Menu Trigger -->
+        <button onclick="toggleMobileNav()" class="lg:hidden p-2 text-brand-brown hover:bg-brand-bg rounded-lg">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Search Bar Subheader -->
+    <div class="sm:hidden px-4 pb-3">
+      <div class="relative w-full">
+        <input type="text" id="search-input-mobile" oninput="handleSearchMobile()" placeholder="搜尋主子心水用品..." 
+          class="w-full pl-9 pr-4 py-2 text-sm bg-brand-bg border border-brand-brown/20 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-green/50">
+        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-brand-brown/50 text-sm"></i>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav" class="hidden lg:hidden bg-white border-b border-brand-brown/10 px-4 pt-2 pb-4 space-y-2">
+      <a href="#hero" onclick="toggleMobileNav()" class="block py-2 text-brand-brownDark font-medium hover:text-brand-green">主頁</a>
+      <a href="#products" onclick="filterCategory('food'); toggleMobileNav();" class="block py-2 text-brand-brownDark font-medium hover:text-brand-green">🐱 貓貓食品</a>
+      <a href="#products" onclick="filterCategory('supplies'); toggleMobileNav();" class="block py-2 text-brand-brownDark font-medium hover:text-brand-green">🏠 貓貓用品</a>
+      <a href="#products" onclick="filterCategory('healthcare'); toggleMobileNav();" class="block py-2 text-brand-brownDark font-medium hover:text-brand-green">💊 寵物保健</a>
+      <a href="#products" onclick="filterCategory('toys'); toggleMobileNav();" class="block py-2 text-brand-brownDark font-medium hover:text-brand-green">🎾 寵物玩具</a>
+      <a href="#reviews" onclick="toggleMobileNav()" class="block py-2 text-brand-brownDark font-medium hover:text-brand-green">💬 顧客好評</a>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section id="hero" class="relative py-12 md:py-20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Hero Text Left -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 bg-brand-green/10 text-brand-greenDark px-4 py-1.5 rounded-full text-sm font-bold border border-brand-green/20 shadow-sm">
+            <span>✨ Cattitude.co 新登場</span>
+            <span class="bg-brand-green text-white text-xs px-2 py-0.5 rounded-full">優惠碼: CAT2026</span>
+          </div>
+          
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-brand-brownDark leading-tight">
+            給主子最溫馨的寵愛 <span class="inline-block hover:rotate-12 transition-transform">🐱</span>
+          </h1>
+          
+          <p class="text-base sm:text-lg text-brand-brown/80 max-w-2xl mx-auto lg:mx-0 font-medium">
+            嚴選全球優質貓貓無穀罐頭、智能生活用品、天然保健與舒壓玩具。為您與貓咪打造最極致的安心購物體驗。
+          </p>
+
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#products" class="w-full sm:w-auto bg-brand-brown hover:bg-brand-brownDark text-white font-bold px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 text-center flex items-center justify-center gap-2 group">
+              <span>即刻選購心水產品</span>
+              <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="#reviews" class="w-full sm:w-auto bg-white border-2 border-brand-brown/20 hover:border-brand-brown text-brand-brown font-bold px-7 py-4 rounded-full shadow-sm hover:bg-brand-bg transition-all text-center flex items-center justify-center gap-2">
+              <i class="fa-solid fa-star text-brand-gold"></i>
+              <span>查看香港貓奴好評</span>
+            </a>
+          </div>
+
+          <!-- Highlight Badges Grid -->
+          <div class="grid grid-cols-3 gap-3 pt-6 border-t border-brand-brown/10 max-w-xl mx-auto lg:mx-0">
+            <div class="bg-white/80 p-3 rounded-2xl text-center border border-brand-brown/10 shadow-sm">
+              <i class="fa-solid fa-truck-ramp-box text-brand-green text-xl mb-1"></i>
+              <div class="text-xs font-bold text-brand-brownDark">HK$350 免運</div>
+              <div class="text-[10px] text-gray-500">全港順豐送上門</div>
+            </div>
+            <div class="bg-white/80 p-3 rounded-2xl text-center border border-brand-brown/10 shadow-sm">
+              <i class="fa-solid fa-certificate text-brand-gold text-xl mb-1"></i>
+              <div class="text-xs font-bold text-brand-brownDark">100% 正貨</div>
+              <div class="text-[10px] text-gray-500">原廠直送品質保證</div>
+            </div>
+            <div class="bg-white/80 p-3 rounded-2xl text-center border border-brand-brown/10 shadow-sm">
+              <i class="fa-solid fa-bolt text-brand-accent text-xl mb-1"></i>
+              <div class="text-xs font-bold text-brand-brownDark">快速出貨</div>
+              <div class="text-[10px] text-gray-500">24-48小時寄出</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Image Right -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative mx-auto max-w-md lg:max-w-none">
+            <!-- Decorative circle backdrops -->
+            <div class="absolute -top-6 -left-6 w-72 h-72 bg-brand-gold/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-6 -right-6 w-72 h-72 bg-brand-green/20 rounded-full blur-2xl"></div>
+            
+            <!-- Hero Image Frame -->
+            <div class="relative bg-white p-4 rounded-3xl shadow-cute-lg border border-brand-brown/10">
+              <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80" 
+                alt="Cute Cat" class="w-full h-80 sm:h-96 object-cover rounded-2xl shadow-inner">
+              
+              <!-- Floating Card Badge 1 -->
+              <div class="absolute top-8 -left-6 bg-white p-3 rounded-2xl shadow-lg border border-brand-brown/10 flex items-center gap-3 animate-bounce" style="animation-duration: 3s;">
+                <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center font-black">
+                  <i class="fa-solid fa-heart"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-500 font-bold">滿意度高達</div>
+                  <div class="text-sm font-black text-brand-brownDark">99.8% 貓奴一致好評</div>
+                </div>
+              </div>
+
+              <!-- Floating Card Badge 2 -->
+              <div class="absolute -bottom-4 right-4 bg-white p-3 rounded-2xl shadow-lg border border-brand-brown/10 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brand-green/10 text-brand-green flex items-center justify-center font-black">
+                  <i class="fa-solid fa-shield-cat"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-500 font-bold">品質嚴格把關</div>
+                  <div class="text-sm font-black text-brand-brownDark">天然無添加色素</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Category & Banner Highlight Section -->
+  <section class="py-6 bg-white/60 border-y border-brand-brown/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-brand-brown">🔥 本月熱門分類：</div>
+        <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm font-bold">
+          <button onclick="filterCategory('food')" class="px-3 py-1.5 rounded-full bg-white border border-brand-brown/20 text-brand-brown hover:bg-brand-brown hover:text-white transition-all shadow-sm">
+            🐱 零小麥鮮肉罐罐
+          </button>
+          <button onclick="filterCategory('supplies')" class="px-3 py-1.5 rounded-full bg-white border border-brand-brown/20 text-brand-brown hover:bg-brand-brown hover:text-white transition-all shadow-sm">
+            🏠 meoof 智能系列
+          </button>
+          <button onclick="filterCategory('healthcare')" class="px-3 py-1.5 rounded-full bg-white border border-brand-brown/20 text-brand-brown hover:bg-brand-brown hover:text-white transition-all shadow-sm">
+            💊 腸胃益生菌
+          </button>
+          <button onclick="filterCategory('toys')" class="px-3 py-1.5 rounded-full bg-white border border-brand-brown/20 text-brand-brown hover:bg-brand-brown hover:text-white transition-all shadow-sm">
+            🎾 貓草抓抓包
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Products Section -->
+  <section id="products" class="py-12 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Title & Controls Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+        <div>
+          <div class="text-brand-green font-bold text-sm tracking-wider uppercase mb-1">Cattitude Selection</div>
+          <h2 class="text-2xl sm:text-4xl font-black text-brand-brownDark">精選貓咪用品專區</h2>
+        </div>
+
+        <!-- Filter Controls bar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <!-- Category Tabs -->
+          <div class="flex items-center gap-1 bg-white p-1 rounded-full border border-brand-brown/10 shadow-sm text-xs sm:text-sm font-bold overflow-x-auto">
+            <button onclick="filterCategory('all')" id="btn-cat-all" class="cat-btn active px-4 py-2 rounded-full transition-all bg-brand-brown text-white shadow-sm">
+              全部
+            </button>
+            <button onclick="filterCategory('food')" id="btn-cat-food" class="cat-btn px-4 py-2 rounded-full transition-all text-brand-brown hover:bg-brand-bg">
+              🐱 貓貓食品
+            </button>
+            <button onclick="filterCategory('supplies')" id="btn-cat-supplies" class="cat-btn px-4 py-2 rounded-full transition-all text-brand-brown hover:bg-brand-bg">
+              🏠 貓貓用品
+            </button>
+            <button onclick="filterCategory('healthcare')" id="btn-cat-healthcare" class="cat-btn px-4 py-2 rounded-full transition-all text-brand-brown hover:bg-brand-bg">
+              💊 寵物保健
+            </button>
+            <button onclick="filterCategory('toys')" id="btn-cat-toys" class="cat-btn px-4 py-2 rounded-full transition-all text-brand-brown hover:bg-brand-bg">
+              🎾 寵物玩具
+            </button>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="relative">
+            <select id="sort-select" onchange="sortProducts()" class="bg-white border border-brand-brown/20 text-brand-brownDark font-bold text-xs sm:text-sm rounded-full px-4 py-2 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-brand-green shadow-sm cursor-pointer">
+              <option value="default">熱門推薦</option>
+              <option value="price-low">價格：由低至高</option>
+              <option value="price-high">價格：由高至低</option>
+              <option value="rating">顧客評分最高</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-3 top-3 text-xs text-brand-brown/60 pointer-events-none"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Search / Filter Indicator -->
+      <div id="filter-indicator" class="hidden mb-6 flex items-center gap-2 text-sm text-brand-brown font-medium">
+        <span>目前顯示：</span>
+        <span id="active-filter-tag" class="bg-brand-brown/10 px-3 py-1 rounded-full text-brand-brownDark font-bold">全部商品</span>
+        <button onclick="resetFilters()" class="text-xs text-brand-accent underline hover:text-red-700 ml-2">清除篩選</button>
+      </div>
+
+      <!-- Product Grid -->
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- Products populated dynamically by JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="no-products" class="hidden text-center py-16 bg-white/50 rounded-3xl border border-dashed border-brand-brown/20 my-8">
+        <i class="fa-solid fa-cat text-5xl text-brand-brown/30 mb-3"></i>
+        <h3 class="text-lg font-bold text-brand-brown">找不到相關的主子商品</h3>
+        <p class="text-xs text-brand-brown/60 mt-1">請嘗試搜尋其他關鍵字或切換分類選項。</p>
+        <button onclick="resetFilters()" class="mt-4 bg-brand-brown text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-brand-brownDark">查看所有商品</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Customer Reviews & Social Proof Section -->
+  <section id="reviews" class="py-16 bg-white/70 border-t border-brand-brown/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-brand-green font-bold text-sm tracking-wider uppercase">Cat Lovers Feedback</span>
+        <h2 class="text-3xl font-black text-brand-brownDark mt-1">香港貓奴真誠好評 💬</h2>
+        <p class="text-brand-brown/80 text-sm mt-2">看看其他主人與主子收到 Cattitude.co 商品後的真實開箱與體驗！</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Review 1 -->
+        <div class="bg-white p-6 rounded-3xl border border-brand-brown/10 shadow-cute hover:shadow-cute-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-1 text-brand-gold text-sm mb-3">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-brand-brownDark font-medium text-sm leading-relaxed mb-4">
+              「主子超級鍾意呢款鮮肉罐罐！開罐頭果陣香氣好濃，完全冇小麥成份，貓貓食完消化好咗，連便便都冇咁臭，肯定會無限回購！」
+            </p>
+          </div>
+          <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Owner" class="w-10 h-10 rounded-full object-cover">
+            <div>
+              <div class="text-sm font-bold text-brand-brownDark">Sarah L. & 糰子 🐾</div>
+              <div class="text-[11px] text-gray-400">已購買：零小麥鮮肉主食罐</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2 -->
+        <div class="bg-white p-6 rounded-3xl border border-brand-brown/10 shadow-cute hover:shadow-cute-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-1 text-brand-gold text-sm mb-3">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-brand-brownDark font-medium text-sm leading-relaxed mb-4">
+              「meoof 自動餵食器出糧好準時，App 操控簡單！而且出貨超快，下單第二日順豐就送到了，包裝得好穩陣，強烈推薦！」
+            </p>
+          </div>
+          <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Owner" class="w-10 h-10 rounded-full object-cover">
+            <div>
+              <div class="text-sm font-bold text-brand-brownDark">Jason Chow & 奶油 🐱</div>
+              <div class="text-[11px] text-gray-400">已購買：meoof 智能自動餵食器</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3 -->
+        <div class="bg-white p-6 rounded-3xl border border-brand-brown/10 shadow-cute hover:shadow-cute-lg transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-1 text-brand-gold text-sm mb-3">
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+            </div>
+            <p class="text-brand-brownDark font-medium text-sm leading-relaxed mb-4">
+              「豆腐貓砂吸水力超強，凝結力高而且真係完全冇塵！貓爪唔會帶砂出嚟，屋企乾淨咗好多，滿 HK$350 免運費好貼心！」
+            </p>
+          </div>
+          <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80" alt="Owner" class="w-10 h-10 rounded-full object-cover">
+            <div>
+              <div class="text-sm font-bold text-brand-brownDark">Grace Wong & 咪咪 🐈</div>
+              <div class="text-[11px] text-gray-400">已購買：極細低塵豆腐貓砂</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-brown text-white pt-12 pb-8 border-t border-brand-brownDark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-brand-brownLight/30">
+        
+        <!-- Col 1: About -->
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-white text-brand-brown flex items-center justify-center font-bold">
+              <i class="fa-solid fa-cat"></i>
+            </div>
+            <span class="text-xl font-black">Cattitude.co</span>
+          </div>
+          <p class="text-xs text-brand-bg/80 leading-relaxed">
+            香港溫馨寵物用品專門店。堅持嚴選最優質天然貓糧與生活精品，讓每位主子都能享受貴族般的寵愛體驗。
+          </p>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div>
+          <h4 class="font-bold text-sm text-brand-gold mb-3">快速連結</h4>
+          <ul class="space-y-2 text-xs text-brand-bg/80">
+            <li><a href="#products" onclick="filterCategory('food')" class="hover:text-white transition-colors">🐱 貓貓食品專區</a></li>
+            <li><a href="#products" onclick="filterCategory('supplies')" class="hover:text-white transition-colors">🏠 智能養貓用品</a></li>
+            <li><a href="#products" onclick="filterCategory('healthcare')" class="hover:text-white transition-colors">💊 腸胃與化毛保健</a></li>
+            <li><a href="#products" onclick="filterCategory('toys')" class="hover:text-white transition-colors">🎾 互動舒壓玩具</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Customer Service -->
+        <div>
+          <h4 class="font-bold text-sm text-brand-gold mb-3">客戶服務與幫助</h4>
+          <ul class="space-y-2 text-xs text-brand-bg/80">
+            <li><a href="#" onclick="alert('全店購物滿 HK$350 即可免費享用順豐速運服務！')" class="hover:text-white">送貨條款與運費說明</a></li>
+            <li><a href="#" onclick="alert('我們提供 7 天商品瑕疵退換保證。')" class="hover:text-white">退換貨政策</a></li>
+            <li><a href="#" onclick="alert('結帳時輸入 CAT2026 即享 HK$30 折扣！')" class="hover:text-white">最新優惠碼資訊</a></li>
+            <li><a href="#" onclick="alert('如有任何查詢，歡迎使用 WhatsApp 聯絡我們。')" class="hover:text-white">常見問題 FAQ</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Contact & Socials -->
+        <div>
+          <h4 class="font-bold text-sm text-brand-gold mb-3">聯絡我們</h4>
+          <div class="space-y-2 text-xs text-brand-bg/80">
+            <p><i class="fa-brands fa-whatsapp text-green-400 mr-2 text-sm"></i>WhatsApp: +852 9876 5432</p>
+            <p><i class="fa-regular fa-envelope mr-2"></i>hello@cattitude.co</p>
+            <p><i class="fa-solid fa-location-dot mr-2"></i>香港九龍觀塘興業街寵物中心 8 樓</p>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <a href="#" class="w-8 h-8 rounded-full bg-brand-brownDark flex items-center justify-center hover:bg-white hover:text-brand-brown transition-colors"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="w-8 h-8 rounded-full bg-brand-brownDark flex items-center justify-center hover:bg-white hover:text-brand-brown transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-bg/60 gap-4">
+        <div>© 2026 Cattitude.co 版權所有。給主子最溫馨的寵愛。</div>
+        <div class="flex items-center gap-3 text-lg text-white/80">
+          <i class="fa-brands fa-cc-visa" title="Visa"></i>
+          <i class="fa-brands fa-cc-mastercard" title="MasterCard"></i>
+          <i class="fa-brands fa-apple-pay" title="Apple Pay"></i>
+          <span class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded">FPS 轉數快</span>
+          <span class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded">PayMe</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ==================== MODALS & DRAWERS ==================== -->
+
+  <!-- 1. Quick View Modal (快速預覽彈窗) -->
+  <div id="quickview-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div onclick="closeQuickView()" class="modal-backdrop absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0"></div>
+    
+    <!-- Modal Content -->
+    <div id="quickview-container" class="modal-container relative bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden z-10 opacity-0 scale-95 border border-brand-brown/10">
+      <button onclick="closeQuickView()" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <!-- Product Image -->
+        <div class="p-6 bg-brand-bg/50 flex items-center justify-center relative">
+          <img id="qv-image" src="" alt="Product Image" class="max-h-72 object-contain rounded-2xl shadow-sm">
+          <span id="qv-badge" class="absolute top-4 left-4 text-xs font-black text-white px-3 py-1 rounded-full bg-brand-accent"></span>
+        </div>
+
+        <!-- Product Details -->
+        <div class="p-6 sm:p-8 flex flex-col justify-between space-y-4">
+          <div>
+            <span id="qv-category" class="text-xs font-bold text-brand-green uppercase tracking-wider"></span>
+            <h3 id="qv-title" class="text-xl font-black text-brand-brownDark mt-1"></h3>
+            
+            <!-- Rating -->
+            <div class="flex items-center gap-2 mt-2">
+              <div id="qv-stars" class="flex text-brand-gold text-xs"></div>
+              <span id="qv-rating-text" class="text-xs text-gray-500 font-bold"></span>
+            </div>
+
+            <!-- Price -->
+            <div class="mt-4 flex items-baseline gap-3">
+              <span id="qv-price" class="text-2xl font-black text-brand-brown"></span>
+              <span id="qv-orig-price" class="text-sm text-gray-400 line-through"></span>
+            </div>
+
+            <!-- Description & Spec -->
+            <div class="mt-4 space-y-2">
+              <p id="qv-description" class="text-xs sm:text-sm text-brand-brown/80 leading-relaxed"></p>
+              <div class="bg-brand-bg p-3 rounded-xl text-xs space-y-1 text-brand-brownDark">
+                <div class="font-bold border-b border-brand-brown/10 pb-1 mb-1">📋 產品規格與特色：</div>
+                <div id="qv-spec-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="pt-4 border-t border-gray-100 space-y-3">
+            <div class="flex items-center gap-3">
+              <!-- Quantity selector -->
+              <div class="flex items-center border border-brand-brown/20 rounded-full bg-white">
+                <button onclick="adjustQvQty(-1)" class="w-8 h-8 flex items-center justify-center text-brand-brown hover:bg-brand-bg rounded-l-full">-</button>
+                <span id="qv-qty" class="w-10 text-center font-bold text-sm text-brand-brownDark">1</span>
+                <button onclick="adjustQvQty(1)" class="w-8 h-8 flex items-center justify-center text-brand-brown hover:bg-brand-bg rounded-r-full">+</button>
+              </div>
+
+              <!-- Add to cart -->
+              <button id="qv-add-btn" class="flex-1 bg-brand-green hover:bg-brand-greenDark text-white font-bold py-2.5 px-4 rounded-full shadow hover:shadow-md transition-all flex items-center justify-center gap-2 text-sm">
+                <i class="fa-solid fa-cart-plus"></i>
+                <span>加入購物車</span>
+              </button>
+            </div>
+
+            <button id="qv-wishlist-btn" class="w-full py-2 border border-brand-brown/20 rounded-full text-xs font-bold text-brand-brown hover:bg-brand-bg transition-colors flex items-center justify-center gap-2">
+              <i class="fa-regular fa-heart text-brand-accent"></i>
+              <span>加入心水收藏清單</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 2. Interactive Cart Drawer (側欄購物車) -->
+  <div id="cart-drawer" class="fixed inset-0 z-50 hidden">
+    <!-- Overlay -->
+    <div onclick="closeCartDrawer()" id="cart-overlay" class="drawer-overlay absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0"></div>
+
+    <!-- Right Sliding Panel -->
+    <div id="cart-panel" class="drawer-content absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col translate-x-full z-10">
+      
+      <!-- Cart Header -->
+      <div class="p-4 sm:p-5 bg-brand-bg border-b border-brand-brown/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-basket-shopping text-brand-brown text-lg"></i>
+          <h3 class="font-black text-brand-brownDark text-lg">購物車內容</h3>
+          <span id="cart-count-title" class="text-xs bg-brand-brown text-white font-bold px-2 py-0.5 rounded-full">0</span>
+        </div>
+        <button onclick="closeCartDrawer()" class="p-2 text-gray-500 hover:text-brand-brown transition-colors">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Free Shipping Progress Bar Section -->
+      <div class="bg-brand-green/10 p-4 border-b border-brand-green/20">
+        <div class="flex items-center justify-between text-xs font-bold text-brand-brownDark mb-1.5">
+          <span id="shipping-progress-text">免運費進度條</span>
+          <span id="shipping-amount-text" class="text-brand-greenDark">滿 HK$350 免運</span>
+        </div>
+        <div class="w-full bg-white h-2.5 rounded-full overflow-hidden p-0.5 border border-brand-green/20">
+          <div id="shipping-progress-bar" class="bg-brand-green h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Cart Items List (Scrollable) -->
+      <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+        <!-- Populated via Javascript -->
+      </div>
+
+      <!-- Empty Cart Message -->
+      <div id="cart-empty-state" class="hidden flex-1 flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <div class="w-20 h-20 rounded-full bg-brand-bg flex items-center justify-center text-brand-brown/40 text-3xl">
+          <i class="fa-solid fa-cat"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-brand-brownDark text-base">購物車空空如也 🐾</h4>
+          <p class="text-xs text-brand-brown/70 mt-1">快啲為主子添置心水食品與用品啦！</p>
+        </div>
+        <button onclick="closeCartDrawer()" class="bg-brand-brown hover:bg-brand-brownDark text-white text-xs font-bold px-6 py-2.5 rounded-full shadow">
+          去逛逛精選商品
+        </button>
+      </div>
+
+      <!-- Cart Footer / Promo Code / Checkout Summary -->
+      <div id="cart-footer" class="p-4 sm:p-5 bg-white border-t border-brand-brown/10 space-y-3 shadow-lg">
+        
+        <!-- Promo Code Input Box -->
+        <div class="flex gap-2">
+          <input type="text" id="promo-input" placeholder="輸入優惠碼 (如 CAT2026)" 
+            class="flex-1 px-3 py-2 text-xs bg-brand-bg border border-brand-brown/20 rounded-xl focus:outline-none focus:ring-1 focus:ring-brand-green uppercase font-bold text-brand-brownDark">
+          <button onclick="applyPromoCode()" class="bg-brand-brown hover:bg-brand-brownDark text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors">
+            套用
+          </button>
+        </div>
+        <div id="promo-feedback" class="text-[11px] font-bold hidden"></div>
+
+        <!-- Summary Cost Breakdown -->
+        <div class="space-y-1.5 text-xs text-brand-brown/80 pt-2 border-t border-gray-100">
+          <div class="flex justify-between">
+            <span>商品小計：</span>
+            <span id="cart-subtotal" class="font-bold text-brand-brownDark">HK$0</span>
+          </div>
+          <div id="promo-discount-row" class="hidden flex justify-between text-brand-accent font-bold">
+            <span>優惠碼折扣：</span>
+            <span id="cart-discount">-HK$0</span>
+          </div>
+          <div class="flex justify-between">
+            <span>估算運費 (順豐速運)：</span>
+            <span id="cart-shipping-fee" class="font-bold text-brand-brownDark">HK$30</span>
+          </div>
+          <div class="flex justify-between text-sm font-black text-brand-brownDark pt-2 border-t border-dashed border-gray-200">
+            <span>應付總額：</span>
+            <span id="cart-total" class="text-lg text-brand-brown">HK$0</span>
+          </div>
+        </div>
+
+        <!-- Checkout Trigger Button -->
+        <button onclick="openCheckoutModal()" class="w-full bg-brand-green hover:bg-brand-greenDark text-white font-black py-3 rounded-full shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm">
+          <span>立即前往模擬結帳</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- 3. Checkout Modal (模擬結帳彈窗) -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div onclick="closeCheckoutModal()" class="modal-backdrop absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0"></div>
+
+    <div id="checkout-container" class="modal-container relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden z-10 opacity-0 scale-95 border border-brand-brown/10 max-h-[90vh] flex flex-col">
+      
+      <!-- Checkout Header -->
+      <div class="p-5 bg-brand-brown text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-credit-card"></i>
+          <h3 class="font-black text-lg">Cattitude.co 安全結帳</h3>
+        </div>
+        <button onclick="closeCheckoutModal()" class="text-white/80 hover:text-white">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Checkout Body (Form vs Success View) -->
+      <div id="checkout-form-view" class="p-6 overflow-y-auto space-y-6">
+        
+        <!-- Order Summary Brief -->
+        <div class="bg-brand-bg p-4 rounded-2xl border border-brand-brown/10 flex justify-between items-center text-xs sm:text-sm">
+          <div>
+            <span class="text-brand-brown font-bold">訂單商品總數：</span>
+            <span id="checkout-summary-count" class="font-bold text-brand-brownDark">0 件</span>
+          </div>
+          <div>
+            <span class="text-brand-brown font-bold">應付金額：</span>
+            <span id="checkout-summary-total" class="font-black text-brand-accent text-lg">HK$0</span>
+          </div>
+        </div>
+
+        <!-- Shipping Info Form -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-sm text-brand-brownDark border-b border-gray-100 pb-1">1. 收件人與送貨資料</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-600 mb-1">顧客姓名 *</label>
+              <input type="text" id="chk-name" value="陳小貓" class="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl focus:ring-1 focus:ring-brand-green focus:outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-600 mb-1">聯絡電話 (WhatsApp) *</label>
+              <input type="text" id="chk-phone" value="+852 9123 4567" class="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl focus:ring-1 focus:ring-brand-green focus:outline-none">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">順豐站 / 智能櫃 / 住宅地址 *</label>
+            <input type="text" id="chk-address" value="九龍旺角彌敦道 688 號旺角中心 順豐站 H852M012P" class="w-full px-3 py-2 text-xs border border-gray-200 rounded-xl focus:ring-1 focus:ring-brand-green focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Payment Method Selection -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-sm text-brand-brownDark border-b border-gray-100 pb-1">2. 選擇香港本地付款方式</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            
+            <label class="cursor-pointer">
+              <input type="radio" name="payment" value="fps" checked class="peer hidden">
+              <div class="p-3 rounded-2xl border-2 border-gray-200 peer-checked:border-brand-brown peer-checked:bg-brand-bg text-center space-y-1 transition-all">
+                <div class="font-black text-xs text-brand-brownDark">FPS 轉數快</div>
+                <div class="text-[10px] text-gray-400">即時免手續費</div>
+              </div>
+            </label>
+
+            <label class="cursor-pointer">
+              <input type="radio" name="payment" value="payme" class="peer hidden">
+              <div class="p-3 rounded-2xl border-2 border-gray-200 peer-checked:border-brand-brown peer-checked:bg-brand-bg text-center space-y-1 transition-all">
+                <div class="font-black text-xs text-red-600">PayMe</div>
+                <div class="text-[10px] text-gray-400">一鍵掃碼付款</div>
+              </div>
+            </label>
+
+            <label class="cursor-pointer">
+              <input type="radio" name="payment" value="card" class="peer hidden">
+              <div class="p-3 rounded-2xl border-2 border-gray-200 peer-checked:border-brand-brown peer-checked:bg-brand-bg text-center space-y-1 transition-all">
+                <div class="font-black text-xs text-blue-600">信用卡</div>
+                <div class="text-[10px] text-gray-400">Visa / Master</div>
+              </div>
+            </label>
+
+            <label class="cursor-pointer">
+              <input type="radio" name="payment" value="applepay" class="peer hidden">
+              <div class="p-3 rounded-2xl border-2 border-gray-200 peer-checked:border-brand-brown peer-checked:bg-brand-bg text-center space-y-1 transition-all">
+                <div class="font-black text-xs text-black">Apple Pay</div>
+                <div class="text-[10px] text-gray-400">快速安全付款</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Submit Checkout Button -->
+        <button onclick="processCheckout()" class="w-full bg-brand-brown hover:bg-brand-brownDark text-white font-black py-3.5 rounded-full shadow-lg transition-all text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-lock"></i>
+          <span>確認並模擬完成付款</span>
+        </button>
+
+      </div>
+
+      <!-- Checkout Success View (Hidden by default) -->
+      <div id="checkout-success-view" class="hidden p-8 text-center space-y-4">
+        <div class="w-20 h-20 bg-green-100 text-brand-green rounded-full flex items-center justify-center mx-auto text-4xl animate-bounce">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 class="text-2xl font-black text-brand-brownDark">訂單已成功提交！🎉</h3>
+        <p class="text-xs sm:text-sm text-brand-brown/80 max-w-md mx-auto">
+          多謝您支持 Cattitude.co！我們已收到您的訂單，我們會盡快封箱並安排順豐寄出給主子！
+        </p>
+        <div class="bg-brand-bg p-4 rounded-2xl border border-brand-brown/10 text-xs text-left max-w-sm mx-auto space-y-1">
+          <div><b>訂單編號：</b> <span id="success-order-id" class="font-mono text-brand-brown">#CAT-88921</span></div>
+          <div><b>配送方式：</b> 順豐速運門市/智能櫃自取</div>
+          <div><b>預計送達：</b> 24-48 小時內</div>
+        </div>
+        <button onclick="resetOrderAndClose()" class="bg-brand-green text-white font-bold px-8 py-3 rounded-full hover:bg-brand-greenDark shadow">
+          返回繼續購物
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- 4. Wishlist Drawer / Modal -->
+  <div id="wishlist-drawer" class="fixed inset-0 z-50 hidden">
+    <div onclick="toggleWishlistDrawer()" class="drawer-overlay absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="drawer-content absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col z-10 p-5">
+      <div class="flex items-center justify-between pb-4 border-b border-gray-100">
+        <div class="flex items-center gap-2 text-brand-brown font-black">
+          <i class="fa-solid fa-heart text-brand-accent"></i>
+          <h3>我的心水收藏清單</h3>
+        </div>
+        <button onclick="toggleWishlistDrawer()" class="text-gray-400 hover:text-brand-brown"><i class="fa-solid fa-xmark text-xl"></i></button>
+      </div>
+
+      <div id="wishlist-container" class="flex-1 overflow-y-auto py-4 space-y-3">
+        <!-- Wishlist items JavaScript inserted -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // 1. PRODUCT DATABASE
+    const PRODUCTS = [
+      {
+        id: 'p1',
+        name: '零小麥鮮肉主食罐 (全口味組 12 罐裝)',
+        category: 'food',
+        categoryLabel: '🐱 貓貓食品',
+        price: 228,
+        originalPrice: 268,
+        badge: '熱賣商品',
+        rating: 4.9,
+        reviewsCount: 128,
+        image: 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=600&q=80',
+        description: '採用 98% 優質鮮肉調配，無小麥、無穀物、零膠類添加。富含牛磺酸與必需胺基酸，補充貓咪每日所需水份。',
+        specs: ['規格: 85g x 12 罐', '產地: 紐西蘭原裝進口', '適合對象: 全齡貓適用', '保存期限: 24 個月']
+      },
+      {
+        id: 'p2',
+        name: 'meoof 智能自動餵食器 (3.5L 大容量)',
+        category: 'supplies',
+        categoryLabel: '🏠 貓貓用品',
+        price: 388,
+        originalPrice: 458,
+        badge: '獨家推薦',
+        rating: 4.8,
+        reviewsCount: 95,
+        image: 'https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80',
+        description: '手機 App 定時定量遠端餵食，防堵糧卡卡設計。304 不銹鋼飯碗易拆洗，備用電池防斷電設計。',
+        specs: ['容量: 3.5 公升', '連線方式: 2.4G Wi-Fi', '材質: 食品級 ABS + 304 不銹鋼', '保養: 1 年原廠保用']
+      },
+      {
+        id: 'p3',
+        name: '頂級有機貓草化毛膏 (100g 升級版)',
+        category: 'healthcare',
+        categoryLabel: '💊 寵物保健',
+        price: 128,
+        originalPrice: 150,
+        badge: '護理首選',
+        rating: 4.9,
+        reviewsCount: 84,
+        image: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80',
+        description: '天然有機貓草萃取，溫和促進腸胃蠕動排出毛球。無添加礦物油與化學防腐劑，味道極佳主子愛吃。',
+        specs: ['容量: 100g', '成分: 天然小麥草、亞麻籽油、綜合維生素', '食用方法: 每日 2-3 cm']
+      },
+      {
+        id: 'p4',
+        name: '智能電動雷射旋轉玩具 (USB 充電式)',
+        category: 'toys',
+        categoryLabel: '🎾 寵物玩具',
+        price: 168,
+        originalPrice: 198,
+        badge: '限時優惠',
+        rating: 4.7,
+        reviewsCount: 62,
+        image: 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80',
+        description: '360 度不規則紅外線雷射軌跡，激發貓咪獵食本能。自動定時 15 分鐘休息防過勞，低音運轉不驚嚇。',
+        specs: ['充電方式: Type-C USB 快速充電', '續航力: 滿電可用約 5 小時', '模式: 慢速/快速/隨機 3 檔']
+      },
+      {
+        id: 'p5',
+        name: '極細低塵豆腐貓砂 (6L 4包裝優惠套裝)',
+        category: 'supplies',
+        categoryLabel: '🏠 貓貓用品',
+        price: 198,
+        originalPrice: 240,
+        badge: '超值套裝',
+        rating: 4.9,
+        reviewsCount: 210,
+        image: 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80',
+        description: '1.5mm 極細顆粒吸水力提升 50%，3 秒迅速凝結不沾底。天然豌豆纖維製造，可直接沖入馬桶。',
+        specs: ['規格: 6L x 4 包 (約 10kg)', '香味: 原味奶香 / 綠茶香', '材質: 食品級豌豆纖維、澱粉']
+      },
+      {
+        id: 'p6',
+        name: '低溫凍乾雞肉/三文魚貓糧 (500g 散裝密封包)',
+        category: 'food',
+        categoryLabel: '🐱 貓貓食品',
+        price: 145,
+        originalPrice: 175,
+        badge: '極高肉量',
+        rating: 4.8,
+        reviewsCount: 112,
+        image: 'https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?auto=format&fit=crop&w=600&q=80',
+        description: '-40℃ 鎖鮮冷凍乾燥技術，保留完整生肉營養與原汁原味。可作為主糧、拌糧或零食獎勵。',
+        specs: ['重量: 500g', '口味: 智利三文魚 + 走地雞肉', '蛋白質: ≥ 65%']
+      },
+      {
+        id: 'p7',
+        name: '腸胃消化益生菌粉末 (30包獨立裝)',
+        category: 'healthcare',
+        categoryLabel: '💊 寵物保健',
+        price: 210,
+        originalPrice: 250,
+        badge: '獸醫推薦',
+        rating: 4.9,
+        reviewsCount: 78,
+        image: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=600&q=80',
+        description: '每包含 50 億活性益生菌與專利益生元，改善軟便、便秘與口臭問題。獨立包裝防潮保鮮。',
+        specs: ['規格: 1.5g x 30 包', '菌株: 5 種複合專利益生菌', '用法: 倒入罐頭或水拌勻']
+      },
+      {
+        id: 'p8',
+        name: '有機天然貓草抓抓包 (3入薄荷紓壓玩具)',
+        category: 'toys',
+        categoryLabel: '🎾 寵物玩具',
+        price: 45,
+        originalPrice: 60,
+        badge: '治癒小物',
+        rating: 4.6,
+        reviewsCount: 54,
+        image: 'https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80',
+        description: '填充北美特級貓薄荷與木天蓼，香氣持久濃郁。耐磨帆布手工縫製，適合主子啃咬抱抓解悶。',
+        specs: ['組合: 3 個裝 (不同造型)', '材質: 天然帆布 + 有機貓薄荷', '尺寸: 約 10cm x 5cm']
+      },
+      {
+        id: 'p9',
+        name: '高密度耐磨貓抓板沙發 (附贈貓草)',
+        category: 'supplies',
+        categoryLabel: '🏠 貓貓用品',
+        price: 118,
+        originalPrice: 148,
+        badge: '暢銷家具',
+        rating: 4.8,
+        reviewsCount: 143,
+        image: 'https://images.unsplash.com/photo-1545249390-6bdfa286032f?auto=format&fit=crop&w=600&q=80',
+        description: '人體工學弧形沙發設計，磨爪睡眠兩不誤。採用加厚瓦楞紙硬度提升，不易掉屑經久耐用。',
+        specs: ['尺寸: 50cm x 25cm x 12cm', '材質: 高密度瓦楞紙', '附贈: 美國優質貓草一包']
+      }
+    ];
+
+    // STATE VARIABLES
+    let cart = [];
+    let wishlist = [];
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentSort = 'default';
+    let appliedDiscount = 0; // percentage or fixed
+    let promoCodeName = '';
+    let qvCurrentProductId = null;
+    let qvQuantity = 1;
+
+    // INITIALIZATION
+    window.onload = function() {
+      renderProducts();
+      updateCartUI();
+      updateWishlistUI();
+    };
+
+    // 2. PRODUCT RENDER LOGIC
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const noProd = document.getElementById('no-products');
+      grid.innerHTML = '';
+
+      let filtered = PRODUCTS.filter(p => {
+        const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
+        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              p.categoryLabel.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      // Sorting
+      if (currentSort === 'price-low') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (currentSort === 'price-high') {
+        filtered.sort((a, b) => b.price - a.price);
+      } else if (currentSort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      if (filtered.length === 0) {
+        noProd.classList.remove('hidden');
+        return;
+      } else {
+        noProd.classList.add('hidden');
+      }
+
+      filtered.forEach(p => {
+        const isWish = wishlist.some(item => item.id === p.id);
+        
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-3xl border border-brand-brown/10 shadow-cute hover:shadow-cute-lg transition-all transform hover:-translate-y-1 flex flex-col justify-between overflow-hidden relative group";
+
+        card.innerHTML = `
+          <!-- Badge & Wishlist Heart -->
+          <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
+            <span class="bg-brand-brown text-white text-[11px] font-black px-2.5 py-1 rounded-full shadow-sm">${p.badge}</span>
+          </div>
+          <button onclick="toggleWishlist('${p.id}')" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow flex items-center justify-center text-brand-accent hover:scale-110 transition-transform">
+            <i class="${isWish ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+          </button>
+
+          <!-- Image with hover preview trigger -->
+          <div class="relative bg-brand-bg/40 p-4 flex items-center justify-center overflow-hidden h-48 cursor-pointer" onclick="openQuickView('${p.id}')">
+            <img src="${p.image}" alt="${p.name}" class="max-h-40 object-contain group-hover:scale-105 transition-transform duration-300">
+            
+            <!-- Quick View Overlay Button -->
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="bg-white text-brand-brownDark text-xs font-bold px-4 py-2 rounded-full shadow-md flex items-center gap-1.5">
+                <i class="fa-solid fa-eye"></i> 快速預覽
+              </span>
+            </div>
+          </div>
+
+          <!-- Content Body -->
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <span class="text-[11px] font-bold text-brand-green uppercase">${p.categoryLabel}</span>
+              <h3 class="font-bold text-brand-brownDark text-sm sm:text-base leading-snug hover:text-brand-brown cursor-pointer" onclick="openQuickView('${p.id}')">${p.name}</h3>
+              
+              <!-- Stars -->
+              <div class="flex items-center gap-1.5 mt-1 text-xs">
+                <div class="text-brand-gold flex">
+                  ${getStarRatingHTML(p.rating)}
+                </div>
+                <span class="text-[11px] text-gray-400 font-bold">${p.rating} (${p.reviewsCount})</span>
+              </div>
+            </div>
+
+            <!-- Price & Action Button -->
+            <div class="pt-2 border-t border-gray-100 flex items-center justify-between">
+              <div>
+                <span class="text-lg font-black text-brand-brown">HK$${p.price}</span>
+                <span class="text-xs text-gray-400 line-through ml-1">HK$${p.originalPrice}</span>
+              </div>
+              <button onclick="addToCart('${p.id}')" class="bg-brand-green hover:bg-brand-greenDark text-white text-xs font-bold px-3.5 py-2 rounded-full shadow transition-all active:scale-95 flex items-center gap-1.5">
+                <i class="fa-solid fa-cart-plus"></i>
+                <span>加入</span>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function getStarRatingHTML(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        if (rating >= i) stars += '<i class="fa-solid fa-star"></i>';
+        else if (rating >= i - 0.5) stars += '<i class="fa-solid fa-star-half-stroke"></i>';
+        else stars += '<i class="fa-regular fa-star"></i>';
+      }
+      return stars;
+    }
+
+    // 3. CATEGORY & FILTER CONTROLS
+    function filterCategory(cat) {
+      currentCategory = cat;
+      
+      // Update UI Tabs
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-brown', 'text-white', 'shadow-sm');
+        btn.classList.add('text-brand-brown');
+      });
+
+      const activeBtn = document.getElementById(`btn-cat-${cat}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-brown', 'text-white', 'shadow-sm');
+      }
+
+      updateFilterIndicator();
+      renderProducts();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('search-input').value.trim();
+      updateFilterIndicator();
+      renderProducts();
+    }
+
+    function handleSearchMobile() {
+      searchQuery = document.getElementById('search-input-mobile').value.trim();
+      updateFilterIndicator();
+      renderProducts();
+    }
+
+    function sortProducts() {
+      currentSort = document.getElementById('sort-select').value;
+      renderProducts();
+    }
+
+    function updateFilterIndicator() {
+      const ind = document.getElementById('filter-indicator');
+      const activeTag = document.getElementById('active-filter-tag');
+
+      if (currentCategory !== 'all' || searchQuery !== '') {
+        ind.classList.remove('hidden');
+        let label = currentCategory !== 'all' ? `分類: ${currentCategory}` : '';
+        if (searchQuery) label += ` 搜尋: "${searchQuery}"`;
+        activeTag.innerText = label;
+      } else {
+        ind.classList.add('hidden');
+      }
+    }
+
+    function resetFilters() {
+      currentCategory = 'all';
+      searchQuery = '';
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-input-mobile').value = '';
+      filterCategory('all');
+    }
+
+    // 4. QUICK VIEW MODAL
+    function openQuickView(prodId) {
+      const prod = PRODUCTS.find(p => p.id === prodId);
+      if (!prod) return;
+
+      qvCurrentProductId = prodId;
+      qvQuantity = 1;
+
+      document.getElementById('qv-image').src = prod.image;
+      document.getElementById('qv-badge').innerText = prod.badge;
+      document.getElementById('qv-category').innerText = prod.categoryLabel;
+      document.getElementById('qv-title').innerText = prod.name;
+      document.getElementById('qv-stars').innerHTML = getStarRatingHTML(prod.rating);
+      document.getElementById('qv-rating-text').innerText = `${prod.rating} / 5 (${prod.reviewsCount} 則好評)`;
+      document.getElementById('qv-price').innerText = `HK$${prod.price}`;
+      document.getElementById('qv-orig-price').innerText = `HK$${prod.originalPrice}`;
+      document.getElementById('qv-description').innerText = prod.description;
+      document.getElementById('qv-qty').innerText = qvQuantity;
+
+      const specList = document.getElementById('qv-spec-list');
+      specList.innerHTML = prod.specs.map(s => `<div>• ${s}</div>`).join('');
+
+      // Setup Add to Cart button in Modal
+      const addBtn = document.getElementById('qv-add-btn');
+      addBtn.onclick = function() {
+        addToCart(prodId, qvQuantity);
+        closeQuickView();
+      };
+
+      // Show Modal
+      const modal = document.getElementById('quickview-modal');
+      const backdrop = modal.querySelector('.modal-backdrop');
+      const container = document.getElementById('quickview-container');
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        container.classList.remove('opacity-0', 'scale-95');
+      }, 10);
+    }
+
+    function adjustQvQty(delta) {
+      qvQuantity = Math.max(1, qvQuantity + delta);
+      document.getElementById('qv-qty').innerText = qvQuantity;
+    }
+
+    function closeQuickView() {
+      const modal = document.getElementById('quickview-modal');
+      const backdrop = modal.querySelector('.modal-backdrop');
+      const container = document.getElementById('quickview-container');
+
+      backdrop.classList.add('opacity-0');
+      container.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 250);
+    }
+
+    // 5. CART INTERACTIVE DRAWER & LOGIC
+    function addToCart(prodId, qty = 1) {
+      const prod = PRODUCTS.find(p => p.id === prodId);
+      if (!prod) return;
+
+      const existing = cart.find(item => item.id === prodId);
+      if (existing) {
+        existing.quantity += qty;
+      } else {
+        cart.push({ ...prod, quantity: qty });
+      }
+
+      updateCartUI();
+      showToast(`已成功將【${prod.name}】加入購物車！`, 'success');
+    }
+
+    function updateCartQuantity(prodId, delta) {
+      const item = cart.find(i => i.id === prodId);
+      if (!item) return;
+
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        cart = cart.filter(i => i.id !== prodId);
+        showToast(`已從購物車移除商品。`, 'info');
+      }
+      updateCartUI();
+    }
+
+    function removeFromCart(prodId) {
+      cart = cart.filter(i => i.id !== prodId);
+      updateCartUI();
+      showToast(`已從購物車移除商品。`, 'info');
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const titleCount = document.getElementById('cart-count-title');
+      const itemsContainer = document.getElementById('cart-items-container');
+      const emptyState = document.getElementById('cart-empty-state');
+      const footer = document.getElementById('cart-footer');
+
+      const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      badge.innerText = totalItemsCount;
+      titleCount.innerText = totalItemsCount;
+
+      // Render Cart Items
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        footer.classList.add('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        footer.classList.remove('hidden');
+
+        itemsContainer.innerHTML = cart.map(item => `
+          <div class="flex items-center justify-between bg-brand-bg/50 p-3 rounded-2xl border border-brand-brown/10 gap-3">
+            <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-contain rounded-xl bg-white p-1">
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-xs text-brand-brownDark truncate">${item.name}</h4>
+              <div class="text-xs font-black text-brand-brown mt-0.5">HK$${item.price}</div>
+            </div>
+            
+            <!-- Quantity controls -->
+            <div class="flex items-center border border-brand-brown/20 rounded-full bg-white">
+              <button onclick="updateCartQuantity('${item.id}', -1)" class="w-6 h-6 flex items-center justify-center text-xs text-brand-brown hover:bg-brand-bg rounded-l-full">-</button>
+              <span class="w-6 text-center text-xs font-bold text-brand-brownDark">${item.quantity}</span>
+              <button onclick="updateCartQuantity('${item.id}', 1)" class="w-6 h-6 flex items-center justify-center text-xs text-brand-brown hover:bg-brand-bg rounded-r-full">+</button>
+            </div>
+
+            <!-- Remove Button -->
+            <button onclick="removeFromCart('${item.id}')" class="text-gray-400 hover:text-red-500 text-xs p-1">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // Calculations
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      // Calculate Discount
+      let discountAmount = 0;
+      if (promoCodeName === 'CAT2026') {
+        discountAmount = Math.min(subtotal, 30); // HK$30 off
+      } else if (promoCodeName === 'MEOW10') {
+        discountAmount = Math.round(subtotal * 0.10); // 10% off
+      }
+
+      // Free shipping threshold HK$350
+      const freeShippingThreshold = 350;
+      const shippingFee = (subtotal >= freeShippingThreshold || subtotal === 0) ? 0 : 30;
+      const total = Math.max(0, subtotal - discountAmount + shippingFee);
+
+      // Free shipping progress bar
+      const progressPercent = Math.min(100, (subtotal / freeShippingThreshold) * 100);
+      document.getElementById('shipping-progress-bar').style.width = `${progressPercent}%`;
+
+      const remainingForFreeShipping = freeShippingThreshold - subtotal;
+      const headerShippingText = document.getElementById('header-shipping-text');
+      const cartShippingText = document.getElementById('shipping-progress-text');
+
+      if (subtotal >= freeShippingThreshold) {
+        cartShippingText.innerText = '🎉 已達免運費門檻！';
+        headerShippingText.innerHTML = '🎉 您的訂單已享 <b>全港免運費</b>！';
+      } else if (subtotal > 0) {
+        cartShippingText.innerText = `還差 HK$${remainingForFreeShipping} 即可享免運費！`;
+        headerShippingText.innerHTML = `再買 <b>HK$${remainingForFreeShipping}</b> 即享全港免費送貨！`;
+      } else {
+        cartShippingText.innerText = '全店滿 HK$350 即享免運費';
+        headerShippingText.innerHTML = '全店滿 <b>HK$350</b> 即享免費送貨服務！';
+      }
+
+      // Update Subtotal & Total
+      document.getElementById('cart-subtotal').innerText = `HK$${subtotal}`;
+      document.getElementById('cart-shipping-fee').innerText = shippingFee === 0 ? '免費' : `HK$${shippingFee}`;
+      document.getElementById('cart-total').innerText = `HK$${total}`;
+
+      if (discountAmount > 0) {
+        document.getElementById('promo-discount-row').classList.remove('hidden');
+        document.getElementById('cart-discount').innerText = `-HK$${discountAmount}`;
+      } else {
+        document.getElementById('promo-discount-row').classList.add('hidden');
+      }
+    }
+
+    function applyPromoCode() {
+      const codeInput = document.getElementById('promo-input').value.trim().toUpperCase();
+      const feedback = document.getElementById('promo-feedback');
+
+      if (codeInput === 'CAT2026') {
+        promoCodeName = 'CAT2026';
+        feedback.className = "text-[11px] font-bold text-brand-green block";
+        feedback.innerText = "✓ 已套用優惠碼 CAT2026：立減 HK$30！";
+        showToast("優惠碼 CAT2026 套用成功！", "success");
+      } else if (codeInput === 'MEOW10') {
+        promoCodeName = 'MEOW10';
+        feedback.className = "text-[11px] font-bold text-brand-green block";
+        feedback.innerText = "✓ 已套用優惠碼 MEOW10：全單享 9 折優惠！";
+        showToast("優惠碼 MEOW10 套用成功！", "success");
+      } else {
+        promoCodeName = '';
+        feedback.className = "text-[11px] font-bold text-red-500 block";
+        feedback.innerText = "✕ 無效或已過期的優惠碼，請重試。(試試: CAT2026 或 MEOW10)";
+      }
+
+      updateCartUI();
+    }
+
+    function openCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-overlay');
+      const panel = document.getElementById('cart-panel');
+
+      drawer.classList.remove('hidden');
+      setTimeout(() => {
+        overlay.classList.remove('opacity-0');
+        panel.classList.remove('translate-x-full');
+      }, 10);
+    }
+
+    function closeCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      const overlay = document.getElementById('cart-overlay');
+      const panel = document.getElementById('cart-panel');
+
+      overlay.classList.add('opacity-0');
+      panel.classList.add('translate-x-full');
+      setTimeout(() => {
+        drawer.classList.add('hidden');
+      }, 300);
+    }
+
+    // 6. WISHLIST LOGIC
+    function toggleWishlist(prodId) {
+      const prod = PRODUCTS.find(p => p.id === prodId);
+      if (!prod) return;
+
+      const idx = wishlist.findIndex(item => item.id === prodId);
+      if (idx > -1) {
+        wishlist.splice(idx, 1);
+        showToast(`已從收藏清單移除【${prod.name}】`, 'info');
+      } else {
+        wishlist.push(prod);
+        showToast(`已將【${prod.name}】加入心水收藏清單！ ❤️`, 'success');
+      }
+
+      updateWishlistUI();
+      renderProducts();
+    }
+
+    function updateWishlistUI() {
+      const badge = document.getElementById('wishlist-badge');
+      const container = document.getElementById('wishlist-container');
+
+      if (wishlist.length > 0) {
+        badge.innerText = wishlist.length;
+        badge.classList.remove('hidden');
+
+        container.innerHTML = wishlist.map(item => `
+          <div class="flex items-center justify-between bg-brand-bg/50 p-3 rounded-2xl border border-brand-brown/10 gap-3">
+            <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-contain bg-white rounded-xl p-1">
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-xs text-brand-brownDark truncate">${item.name}</h4>
+              <div class="text-xs font-black text-brand-brown">HK$${item.price}</div>
+            </div>
+            <button onclick="addToCart('${item.id}'); toggleWishlist('${item.id}');" class="bg-brand-green text-white text-[11px] px-3 py-1.5 rounded-full font-bold">
+              加購物車
+            </button>
+            <button onclick="toggleWishlist('${item.id}')" class="text-gray-400 hover:text-red-500 text-xs">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        `).join('');
+      } else {
+        badge.classList.add('hidden');
+        container.innerHTML = `
+          <div class="text-center py-12 text-brand-brown/50 space-y-2">
+            <i class="fa-regular fa-heart text-3xl"></i>
+            <p class="text-xs font-bold">暫無心水收藏商品</p>
+          </div>
+        `;
+      }
+    }
+
+    function toggleWishlistDrawer() {
+      const drawer = document.getElementById('wishlist-drawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    // 7. CHECKOUT MODAL LOGIC
+    function openCheckoutModal() {
+      if (cart.length === 0) {
+        showToast("購物車為空，請先選擇商品！", "info");
+        return;
+      }
+
+      closeCartDrawer();
+
+      // Update Summary Info
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      let discountAmount = 0;
+      if (promoCodeName === 'CAT2026') discountAmount = Math.min(subtotal, 30);
+      if (promoCodeName === 'MEOW10') discountAmount = Math.round(subtotal * 0.10);
+      const shippingFee = (subtotal >= 350) ? 0 : 30;
+      const grandTotal = Math.max(0, subtotal - discountAmount + shippingFee);
+
+      document.getElementById('checkout-summary-count').innerText = `${totalItems} 件商品`;
+      document.getElementById('checkout-summary-total').innerText = `HK$${grandTotal}`;
+
+      // Reset to Form View
+      document.getElementById('checkout-form-view').classList.remove('hidden');
+      document.getElementById('checkout-success-view').classList.add('hidden');
+
+      const modal = document.getElementById('checkout-modal');
+      const backdrop = modal.querySelector('.modal-backdrop');
+      const container = document.getElementById('checkout-container');
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        backdrop.classList.remove('opacity-0');
+        container.classList.remove('opacity-0', 'scale-95');
+      }, 10);
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      const backdrop = modal.querySelector('.modal-backdrop');
+      const container = document.getElementById('checkout-container');
+
+      backdrop.classList.add('opacity-0');
+      container.classList.add('opacity-0', 'scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 250);
+    }
+
+    function processCheckout() {
+      const name = document.getElementById('chk-name').value.trim();
+      const phone = document.getElementById('chk-phone').value.trim();
+      const address = document.getElementById('chk-address').value.trim();
+
+      if (!name || !phone || !address) {
+        showToast("請填寫所有收件人與地址資料！", "info");
+        return;
+      }
+
+      // Switch to Success Screen
+      document.getElementById('checkout-form-view').classList.add('hidden');
+      document.getElementById('checkout-success-view').classList.remove('hidden');
+
+      // Random Order ID
+      document.getElementById('success-order-id').innerText = `#CAT-${Math.floor(10000 + Math.random() * 90000)}`;
+
+      // Confetti Effect
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    function resetOrderAndClose() {
+      cart = [];
+      promoCodeName = '';
+      updateCartUI();
+      closeCheckoutModal();
+      showToast("多謝購買！已發送確認訊息至您的電話。", "success");
+    }
+
+    // 8. TOAST NOTIFICATION SYSTEM
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+
+      const bgColor = type === 'success' ? 'bg-brand-brown' : 'bg-brand-brownDark';
+      const icon = type === 'success' ? 'fa-circle-check text-green-400' : 'fa-circle-info text-brand-gold';
+
+      toast.className = `${bgColor} text-white text-xs sm:text-sm font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 transition-all transform translate-y-4 opacity-0 pointer-events-auto border border-white/20`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icon} text-base"></i>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-4', 'opacity-0');
+      }, 10);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // 9. MOBILE MENU TOGGLE
+    function toggleMobileNav() {
+      const nav = document.getElementById('mobile-nav');
+      nav.classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>
